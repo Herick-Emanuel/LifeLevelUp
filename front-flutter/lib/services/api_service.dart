@@ -331,4 +331,34 @@ class ApiService {
       throw Exception('Erro ao carregar ranking global.');
     }
   }
+
+  static Future<bool> updateUser(User user) async {
+    final token =
+        await storage.read(key: 'token'); // Recupera o token de autenticação
+    if (token == null) throw Exception('Token ausente. Faça login novamente.');
+
+    final url = Uri.parse(
+        '$baseUrl/user/${user.id}'); // Endpoint para atualização do usuário
+
+    final response = await http.put(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'name': user.name,
+        'email': user.email,
+        'level': user.level,
+        'points': user.points,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception(
+          'Erro ao atualizar usuário: ${response.statusCode} - ${response.body}');
+    }
+  }
 }

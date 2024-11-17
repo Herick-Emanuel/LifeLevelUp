@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'models/habit.dart';
+import 'models/user.dart';
 import 'progress_page.dart';
 import 'services/api_service.dart';
+import 'settings_page.dart';
 import 'widgets/habit_card.dart';
 import 'widgets/habit_form.dart';
 import 'screens/missions_screen.dart';
@@ -104,6 +106,39 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void _incrementProgress(Habit habit) async {
+    try {
+      Habit updatedHabit = Habit(
+        id: habit.id,
+        name: habit.name,
+        frequency: habit.frequency,
+        goal: habit.goal,
+        progress: habit.progress + 1,
+        reminder: habit.reminder,
+      );
+
+      bool success = await ApiService.updateHabit(updatedHabit);
+      if (success) {
+        User? currentUser = await ApiService.getCurrentUser();
+        if (currentUser != null) {
+          // Calcula pontos com base no progresso
+          int earnedPoints = (habit.progress + 1 >= habit.goal) ? 20 : 5;
+          currentUser.addPoints(earnedPoints);
+
+          // Atualiza o usuário no backend
+          await ApiService.updateUser(currentUser);
+        }
+        await _fetchHabits();
+      } else {
+        throw Exception('Erro ao atualizar progresso.');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao incrementar progresso: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,6 +183,16 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const ProfileScreen()),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: 'Configurações',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsPage()),
               );
             },
           ),

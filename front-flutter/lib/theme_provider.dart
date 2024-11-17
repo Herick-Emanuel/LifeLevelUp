@@ -1,30 +1,55 @@
-// lib/theme_provider.dart
-
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ThemeProvider extends ChangeNotifier {
-  bool isDarkMode = false;
-  Color primaryColor = Colors.blue;
+class ThemeProvider with ChangeNotifier {
+  ThemeMode _themeMode = ThemeMode.system;
+  Color? _customPrimaryColor;
+
+  ThemeMode get themeMode => _themeMode;
+  Color? get customPrimaryColor => _customPrimaryColor;
+
+  ThemeProvider() {
+    _loadPreferences();
+  }
+
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    _themeMode = ThemeMode.values[prefs.getInt('themeMode') ?? 0];
+    final colorValue = prefs.getInt('customPrimaryColor');
+    if (colorValue != null) {
+      _customPrimaryColor = Color(colorValue);
+    }
+    notifyListeners();
+  }
+
+  Future<void> _savePreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt('themeMode', _themeMode.index);
+    if (_customPrimaryColor != null) {
+      prefs.setInt('customPrimaryColor', _customPrimaryColor!.value);
+    }
+  }
+
+  void toggleTheme(ThemeMode mode) {
+    _themeMode = mode;
+    _savePreferences();
+    notifyListeners();
+  }
+
+  void setCustomTheme(Color primaryColor) {
+    _customPrimaryColor = primaryColor;
+    _savePreferences();
+    notifyListeners();
+  }
 
   ThemeData getTheme() {
-    return ThemeData(
-      brightness: isDarkMode ? Brightness.dark : Brightness.light,
-      primaryColor: primaryColor,
-      colorScheme: ColorScheme.fromSwatch(
-        primarySwatch: generateMaterialColor(primaryColor),
-        brightness: isDarkMode ? Brightness.dark : Brightness.light,
-      ),
-    );
-  }
-
-  void toggleTheme(bool isOn) {
-    isDarkMode = isOn;
-    notifyListeners();
-  }
-
-  void updatePrimaryColor(Color color) {
-    primaryColor = color;
-    notifyListeners();
+    if (_customPrimaryColor != null) {
+      return ThemeData(
+        primarySwatch: generateMaterialColor(_customPrimaryColor!),
+        appBarTheme: AppBarTheme(color: _customPrimaryColor),
+      );
+    }
+    return _themeMode == ThemeMode.dark ? ThemeData.dark() : ThemeData.light();
   }
 
   MaterialColor generateMaterialColor(Color color) {
