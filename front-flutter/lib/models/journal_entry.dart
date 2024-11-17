@@ -10,10 +10,13 @@ class JournalEntry {
   });
 
   factory JournalEntry.fromJson(Map<String, dynamic> json) {
+    if (json['content'] == null) {
+      throw Exception("O campo 'content' está nulo.");
+    }
     return JournalEntry(
-      id: json['id'],
-      content: json['content'],
-      createdAt: DateTime.parse(json['created_at']),
+      id: json['id'] as int,
+      content: json['content'] as String,
+      createdAt: DateTime.parse(json['createdAt']),
     );
   }
 }

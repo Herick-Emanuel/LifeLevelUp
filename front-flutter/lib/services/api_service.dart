@@ -361,4 +361,27 @@ class ApiService {
           'Erro ao atualizar usuário: ${response.statusCode} - ${response.body}');
     }
   }
+
+  static Future<bool> addMission({
+    required String title,
+    required String description,
+    required String type,
+  }) async {
+    final token = await storage.read(key: 'token');
+    final url = Uri.parse('$baseUrl/missions');
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'title': title,
+        'description': description,
+        'type': type,
+      }),
+    );
+
+    return response.statusCode == 201;
+  }
 }

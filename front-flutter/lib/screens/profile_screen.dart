@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/user.dart';
+import '../models/customization_item.dart';
 import '../services/api_service.dart';
 import 'customization_screen.dart';
 import 'journal_screen.dart';
@@ -13,12 +14,15 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   User? _user;
+  List<CustomizationItem> _customizationItems = [];
   bool _isLoading = true;
+  bool _isAvatarLoading = true;
 
   @override
   void initState() {
     super.initState();
     _fetchUserProfile();
+    _fetchCustomizationItems();
   }
 
   Future<void> _fetchUserProfile() async {
@@ -35,58 +39,109 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> _fetchCustomizationItems() async {
+    try {
+      List<CustomizationItem> items =
+          await ApiService.getAvailableCustomizationItems();
+      setState(() {
+        _customizationItems = items;
+        _isAvatarLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isAvatarLoading = false;
+      });
+    }
+  }
+
+  Widget _buildAvatarSection() {
+    if (_isAvatarLoading) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (_customizationItems.isEmpty) {
+      return const Text('Sem itens desbloqueados para o avatar.');
+    } else {
+      return Column(
+        children: [
+          const Text(
+            'Meu Avatar',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 10,
+            children: _customizationItems.map((item) {
+              return Chip(
+                label: Text(item.name),
+                avatar: Icon(
+                  Icons.circle,
+                  color:
+                      Colors.blue, // Cor de exemplo para representar os itens
+                ),
+              );
+            }).toList(),
+          ),
+        ],
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Perfil'),
+        title: const Text('Perfil'),
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : _user == null
-              ? Center(child: Text('Erro ao carregar perfil do usuário.'))
+              ? const Center(child: Text('Erro ao carregar perfil do usuário.'))
               : SingleChildScrollView(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
+                      _buildAvatarSection(), // Adicionando o Avatar
+                      const SizedBox(height: 20),
                       Text(
                         _user!.name,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         _user!.email,
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Text(
                         'Nível: ${_user!.level}',
-                        style: TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 20),
                       ),
                       Text(
                         'Pontos: ${_user!.points}',
-                        style: TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 20),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       ListTile(
-                        leading: Icon(Icons.brush),
-                        title: Text('Customização'),
+                        leading: const Icon(Icons.brush),
+                        title: const Text('Customização'),
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CustomizationScreen()),
+                                builder: (context) =>
+                                    const CustomizationScreen()),
                           );
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.book),
-                        title: Text('Diário de Hábitos'),
+                        leading: const Icon(Icons.book),
+                        title: const Text('Diário de Hábitos'),
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => JournalScreen()),
+                                builder: (context) => const JournalScreen()),
                           );
                         },
                       ),

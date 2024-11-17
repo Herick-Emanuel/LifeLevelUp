@@ -28,7 +28,6 @@ class _JournalScreenState extends State<JournalScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      // Trate o erro
       setState(() {
         _isLoading = false;
       });
@@ -39,11 +38,13 @@ class _JournalScreenState extends State<JournalScreen> {
     String content = _controller.text.trim();
     if (content.isEmpty) return;
 
-    bool success = await ApiService.addJournalEntry(content);
-    if (success) {
-      _controller.clear();
-      _fetchEntries();
-    }
+    try {
+      bool success = await ApiService.addJournalEntry(content);
+      if (success) {
+        _controller.clear();
+        _fetchEntries();
+      }
+    } catch (e) {}
   }
 
   @override
@@ -65,9 +66,8 @@ class _JournalScreenState extends State<JournalScreen> {
                             JournalEntry entry = _entries[index];
                             return ListTile(
                               title: Text(entry.content),
-                              subtitle: Text(
-                                entry.createdAt.toLocal().toString(),
-                              ),
+                              subtitle:
+                                  Text(entry.createdAt.toLocal().toString()),
                             );
                           },
                         ),

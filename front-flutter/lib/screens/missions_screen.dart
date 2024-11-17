@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/mission.dart';
 import '../services/api_service.dart';
+import 'add_mission_screen.dart';
 
 class MissionsScreen extends StatefulWidget {
   const MissionsScreen({super.key});
@@ -40,15 +41,28 @@ class _MissionsScreenState extends State<MissionsScreen> {
     }
   }
 
+  void _navigateToAddMission() async {
+    bool? result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddMissionScreen(onMissionAdded: _fetchMissions),
+      ),
+    );
+
+    if (result == true) {
+      _fetchMissions();
+    }
+  }
+
   Widget _buildMissionItem(Mission mission) {
     return ListTile(
       title: Text(mission.title),
       subtitle: Text(mission.description),
       trailing: mission.isCompleted
-          ? Icon(Icons.check, color: Colors.green)
+          ? const Icon(Icons.check, color: Colors.green)
           : ElevatedButton(
               onPressed: () => _completeMission(mission.id),
-              child: Text('Completar'),
+              child: const Text('Completar'),
             ),
     );
   }
@@ -57,12 +71,18 @@ class _MissionsScreenState extends State<MissionsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Missões'),
+        title: const Text('Missões'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: _navigateToAddMission,
+          ),
+        ],
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : _missions.isEmpty
-              ? Center(child: Text('Nenhuma missão disponível.'))
+              ? const Center(child: Text('Nenhuma missão disponível.'))
               : ListView.builder(
                   itemCount: _missions.length,
                   itemBuilder: (context, index) {

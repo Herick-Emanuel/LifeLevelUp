@@ -57,21 +57,19 @@ class _MotivationScreenState extends State<MotivationScreen> {
           : Column(
               children: [
                 Expanded(
-                  child: _messages.isEmpty
-                      ? Center(child: Text('Nenhuma mensagem encontrada.'))
-                      : ListView.builder(
-                          itemCount: _messages.length,
-                          itemBuilder: (context, index) {
-                            MotivationMessage msg = _messages[index];
-                            return ListTile(
-                              title: Text(msg.message),
-                              subtitle: Text(
-                                msg.createdAt.toLocal().toString(),
-                              ),
-                            );
-                          },
-                        ),
-                ),
+                    child: _messages.isEmpty
+                        ? Center(child: Text('Nenhuma mensagem encontrada.'))
+                        : ListView.builder(
+                            itemCount: _messages.length,
+                            itemBuilder: (context, index) {
+                              final message = _messages[index];
+                              return ListTile(
+                                title: Text(message.message),
+                                subtitle: Text(
+                                    message.createdAt.toLocal().toString()),
+                              );
+                            },
+                          )),
                 Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Row(

@@ -1,5 +1,3 @@
-// models/mission.js
-
 const { DataTypes } = require('sequelize');
 const sequelize = require('./db');
 const User = require('./user');
@@ -7,7 +5,7 @@ const User = require('./user');
 const Mission = sequelize.define('Mission', {
     title: { type: DataTypes.STRING, allowNull: false },
     description: { type: DataTypes.STRING },
-    type: { type: DataTypes.STRING, allowNull: false }, // 'daily' ou 'weekly'
+    type: { type: DataTypes.STRING, allowNull: false },
     isCompleted: { type: DataTypes.BOOLEAN, defaultValue: false },
 });
 

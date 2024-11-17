@@ -15,17 +15,14 @@ class NotificationService {
   Future<void> init() async {
     tz.initializeTimeZones();
 
-    // Configuração de inicialização específica para Android
     const AndroidInitializationSettings androidInitializationSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    // Configuração de inicialização geral
     const InitializationSettings initializationSettings =
         InitializationSettings(
       android: androidInitializationSettings,
     );
 
-    // Inicializa o plugin com as configurações especificadas
     await _notificationsPlugin.initialize(initializationSettings);
   }
 

@@ -10,10 +10,13 @@ class MotivationMessage {
   });
 
   factory MotivationMessage.fromJson(Map<String, dynamic> json) {
+    if (json['message'] == null) {
+      throw Exception("O campo 'message' está nulo.");
+    }
     return MotivationMessage(
-      id: json['id'],
-      message: json['message'],
-      createdAt: DateTime.parse(json['created_at']),
+      id: json['id'] as int,
+      message: json['message'] as String,
+      createdAt: DateTime.parse(json['createdAt']),
     );
   }
 }

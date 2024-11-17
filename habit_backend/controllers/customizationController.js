@@ -1,7 +1,6 @@
-// controllers/customizationController.js
-
 const CustomizationItem = require('../models/customizationItem');
 const User = require('../models/user');
+const { Op } = require('sequelize');
 
 exports.getAvailableItems = async (req, res) => {
     try {

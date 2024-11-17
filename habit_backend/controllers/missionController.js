@@ -1,6 +1,27 @@
-// controllers/missionController.js
-
 const Mission = require('../models/mission');
+const User = require('../models/user');
+
+exports.addMission = async (req, res) => {
+    try {
+        const { title, description, type } = req.body;
+        if (!title || !type) {
+            return res.status(400).json({ message: 'Título e tipo são obrigatórios' });
+        }
+
+        const mission = await Mission.create({
+            title,
+            description,
+            type,
+            isCompleted: false,
+            UserId: req.user.userId,
+        });
+
+        res.status(201).json(mission);
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao adicionar missão', error });
+    }
+};
+
 
 exports.getMissions = async (req, res) => {
     try {
@@ -20,9 +41,8 @@ exports.completeMission = async (req, res) => {
             mission.isCompleted = true;
             await mission.save();
 
-            // Recompensa por completar a missão
             const user = await User.findByPk(req.user.userId);
-            user.points += 50; // Exemplo: 50 pontos por missão
+            user.points += 50;
             await user.save();
 
             res.json({ message: 'Missão completada', mission });
