@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/user.dart';
 import '../models/customization_item.dart';
 import '../services/api_service.dart';
+import '../skill_tree_page.dart';
 import 'customization_screen.dart';
 import 'journal_screen.dart';
 
@@ -75,8 +76,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 label: Text(item.name),
                 avatar: Icon(
                   Icons.circle,
-                  color:
-                      Colors.blue, // Cor de exemplo para representar os itens
+                  color: Colors.blue,
                 ),
               );
             }).toList(),
@@ -101,7 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(height: 20),
-                      _buildAvatarSection(), // Adicionando o Avatar
+                      _buildAvatarSection(),
                       const SizedBox(height: 20),
                       Text(
                         _user!.name,
@@ -142,6 +142,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const JournalScreen()),
+                          );
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.tram),
+                        title: Text('Árvore de Habilidades'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SkillTreePage()),
                           );
                         },
                       ),
