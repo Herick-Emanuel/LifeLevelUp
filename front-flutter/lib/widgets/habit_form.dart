@@ -1,5 +1,3 @@
-// lib/widgets/habit_form.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../models/habit.dart';
@@ -8,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class HabitForm extends StatefulWidget {
   final Function(Habit habit) onSave;
-  final Habit? habit; // Para edição
+  final Habit? habit;
 
   const HabitForm({required this.onSave, this.habit, super.key});
 
@@ -32,9 +30,7 @@ class _HabitFormState extends State<HabitForm> {
     _goal = widget.habit?.goal ?? 1;
     _reminder = widget.habit?.reminder ?? false;
     if (widget.habit != null && _reminder) {
-      // Se o hábito já tiver um lembrete, definir um horário padrão ou armazenado
-      _reminderTime =
-          TimeOfDay(hour: 8, minute: 0); // Exemplo de horário padrão
+      _reminderTime = TimeOfDay(hour: 8, minute: 0);
     }
   }
 
@@ -42,7 +38,6 @@ class _HabitFormState extends State<HabitForm> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      // Cria o objeto Habit
       final habit = Habit(
         id: widget.habit?.id ?? 0,
         name: _name,
@@ -52,25 +47,19 @@ class _HabitFormState extends State<HabitForm> {
         reminder: _reminder,
       );
 
-      // Salva o hábito usando a função de callback
       widget.onSave(habit);
 
-      // Agendar lembrete se estiver ativado
       _scheduleReminder();
 
-      // Navega de volta para a HomePage
-      Navigator.of(context)
-          .pop(true); // Passa 'true' para indicar que houve uma atualização
+      Navigator.of(context).pop(true);
     }
   }
 
-  // Método para agendar a notificação de lembrete
   void _scheduleReminder() {
     if (_reminder) {
       final notificationService =
           Provider.of<NotificationService>(context, listen: false);
 
-      // Define a data e hora para o lembrete com base no horário selecionado pelo usuário
       final now = DateTime.now();
       DateTime scheduledDate = DateTime(
         now.year,
@@ -80,16 +69,12 @@ class _HabitFormState extends State<HabitForm> {
         _reminderTime.minute,
       );
 
-      // Se o horário já passou hoje, agenda para amanhã
       if (scheduledDate.isBefore(now)) {
         scheduledDate = scheduledDate.add(Duration(days: 1));
       }
 
-      // Agendar a notificação
       notificationService.scheduleNotification(
-        id: widget.habit?.id ??
-            DateTime.now()
-                .millisecondsSinceEpoch, // Use o ID do hábito ou um timestamp único
+        id: widget.habit?.id ?? DateTime.now().millisecondsSinceEpoch,
         title: 'Lembrete de Hábito',
         body: 'É hora de completar seu hábito: $_name!',
         scheduledDate: scheduledDate,
@@ -121,9 +106,7 @@ class _HabitFormState extends State<HabitForm> {
         child: Form(
           key: _formKey,
           child: ListView(
-            // Usar ListView para evitar overflow em telas menores
             children: [
-              // Campo Nome do Hábito
               TextFormField(
                 initialValue: _name,
                 decoration: InputDecoration(
@@ -141,8 +124,6 @@ class _HabitFormState extends State<HabitForm> {
                 },
               ),
               SizedBox(height: 16),
-
-              // Campo Frequência
               DropdownButtonFormField<String>(
                 value: _frequency,
                 decoration: InputDecoration(
@@ -165,8 +146,6 @@ class _HabitFormState extends State<HabitForm> {
                 },
               ),
               SizedBox(height: 16),
-
-              // Campo Meta
               TextFormField(
                 initialValue: _goal.toString(),
                 decoration: InputDecoration(
@@ -189,8 +168,6 @@ class _HabitFormState extends State<HabitForm> {
                 },
               ),
               SizedBox(height: 16),
-
-              // Switch para Lembrete
               SwitchListTile(
                 title: Text("Ativar Lembrete"),
                 value: _reminder,
@@ -204,8 +181,6 @@ class _HabitFormState extends State<HabitForm> {
                 },
               ),
               SizedBox(height: 8),
-
-              // Campo para selecionar horário do lembrete
               if (_reminder)
                 ListTile(
                   contentPadding: EdgeInsets.zero,
@@ -218,8 +193,6 @@ class _HabitFormState extends State<HabitForm> {
                   ),
                 ),
               SizedBox(height: 20),
-
-              // Botão Salvar Hábito
               ElevatedButton(
                 onPressed: _submitForm,
                 style: ElevatedButton.styleFrom(

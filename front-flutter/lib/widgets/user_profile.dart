@@ -1,5 +1,3 @@
-// lib/widgets/user_profile.dart
-
 import 'package:flutter/material.dart';
 import '../models/user.dart';
 import '../services/api_service.dart';
@@ -29,7 +27,6 @@ class _UserProfileState extends State<UserProfile> {
         _isLoading = false;
       });
     } catch (e) {
-      // Trate o erro
       setState(() {
         _isLoading = false;
       });
@@ -56,7 +53,6 @@ class _UserProfileState extends State<UserProfile> {
           'Pontos: ${_user!.points}',
           style: TextStyle(fontSize: 24),
         ),
-        // Informações adicionais do usuário
       ],
     );
   }

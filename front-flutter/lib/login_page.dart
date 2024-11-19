@@ -1,5 +1,3 @@
-// lib/login_page.dart
-
 import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'register_page.dart';
@@ -64,7 +62,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Definir cores personalizadas
     final Color primaryColor = Colors.teal;
     final Color buttonColor = Colors.tealAccent;
     final Color backgroundColor = Colors.white;
@@ -86,7 +83,6 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Título
                     Text(
                       'Login',
                       style: TextStyle(
@@ -96,7 +92,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     SizedBox(height: 24),
-                    // Campo de E-mail
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: 'E-mail',
@@ -122,7 +117,6 @@ class _LoginPageState extends State<LoginPage> {
                       },
                     ),
                     SizedBox(height: 16),
-                    // Campo de Senha
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: 'Senha',
@@ -146,7 +140,6 @@ class _LoginPageState extends State<LoginPage> {
                       },
                     ),
                     SizedBox(height: 24),
-                    // Botão de Login
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -174,7 +167,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     SizedBox(height: 16),
-                    // Link para Cadastro
                     TextButton(
                       onPressed: _navigateToRegister,
                       child: Text(

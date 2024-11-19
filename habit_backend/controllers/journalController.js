@@ -1,5 +1,3 @@
-// controllers/journalController.js
-
 const JournalEntry = require('../models/journalEntry');
 
 exports.addEntry = async (req, res) => {

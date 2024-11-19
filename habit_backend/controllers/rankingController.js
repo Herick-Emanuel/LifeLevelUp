@@ -1,5 +1,3 @@
-// controllers/rankingController.js
-
 const User = require('../models/user');
 
 exports.getGlobalRanking = async (req, res) => {
@@ -7,7 +5,7 @@ exports.getGlobalRanking = async (req, res) => {
         const users = await User.findAll({
             attributes: ['id', 'name', 'level', 'points'],
             order: [['points', 'DESC']],
-            limit: 100, // Exemplo: top 100 usuários
+            limit: 100,
         });
         res.json(users);
     } catch (error) {

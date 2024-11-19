@@ -333,12 +333,10 @@ class ApiService {
   }
 
   static Future<bool> updateUser(User user) async {
-    final token =
-        await storage.read(key: 'token'); // Recupera o token de autenticação
+    final token = await storage.read(key: 'token');
     if (token == null) throw Exception('Token ausente. Faça login novamente.');
 
-    final url = Uri.parse(
-        '$baseUrl/user/${user.id}'); // Endpoint para atualização do usuário
+    final url = Uri.parse('$baseUrl/user/${user.id}');
 
     final response = await http.put(
       url,

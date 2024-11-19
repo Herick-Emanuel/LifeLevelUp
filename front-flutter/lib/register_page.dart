@@ -1,5 +1,3 @@
-// lib/register_page.dart
-
 import 'package:flutter/material.dart';
 import 'login_page.dart';
 import 'services/api_service.dart';
@@ -75,7 +73,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Definir cores personalizadas
     final Color primaryColor = Colors.teal;
     final Color buttonColor = Colors.tealAccent;
     final Color backgroundColor = Colors.white;
@@ -101,7 +98,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Título
                     Text(
                       'Criar Conta',
                       style: TextStyle(
@@ -111,7 +107,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                     SizedBox(height: 24),
-                    // Campo de Nome
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: 'Nome',
@@ -134,7 +129,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                     ),
                     SizedBox(height: 16),
-                    // Campo de E-mail
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: 'E-mail',
@@ -160,7 +154,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                     ),
                     SizedBox(height: 16),
-                    // Campo de Senha
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: 'Senha',
@@ -184,7 +177,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                     ),
                     SizedBox(height: 24),
-                    // Botão de Cadastro
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -212,7 +204,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                     SizedBox(height: 16),
-                    // Link para Login
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pushReplacement(

@@ -1,5 +1,3 @@
-// routes/customizationRoutes.js
-
 const express = require('express');
 const router = express.Router();
 const customizationController = require('../controllers/customizationController');

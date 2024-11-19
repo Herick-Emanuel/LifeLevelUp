@@ -1,5 +1,3 @@
-// controllers/eventController.js
-
 const Event = require('../models/event');
 const Achievement = require('../models/achievement');
 const User = require('../models/user');
@@ -17,5 +15,3 @@ exports.getActiveEvents = async (req, res) => {
         res.status(500).json({ message: 'Erro ao obter eventos', error });
     }
 };
-
-// Outros controladores podem ser adicionados conforme necessário

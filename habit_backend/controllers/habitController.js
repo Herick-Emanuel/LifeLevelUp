@@ -1,4 +1,3 @@
-// controllers/habitController.js
 const Habit = require('../models/habit');
 const { validationResult } = require('express-validator');
 const { body } = require('express-validator');
@@ -75,14 +74,11 @@ exports.incrementHabitProgress = async (req, res) => {
         if (habit && habit.UserId === req.user.userId) {
             await habit.increment('progress');
 
-            // Atualizar pontos do usuário
             const user = await User.findByPk(req.user.userId);
-            user.points += 10; // Exemplo: 10 pontos por progresso
-            // Verificar se o usuário atingiu um novo nível
+            user.points += 10;
             const pointsNeeded = user.level * 100;
             if (user.points >= pointsNeeded) {
                 user.level += 1;
-                // Pode adicionar lógica adicional para recompensas de nível
             }
             await user.save();
 

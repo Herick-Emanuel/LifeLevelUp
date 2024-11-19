@@ -43,13 +43,19 @@ class ThemeProvider with ChangeNotifier {
   }
 
   ThemeData getTheme() {
+    ThemeData baseTheme =
+        _themeMode == ThemeMode.dark ? ThemeData.dark() : ThemeData.light();
+
     if (_customPrimaryColor != null) {
-      return ThemeData(
-        primarySwatch: generateMaterialColor(_customPrimaryColor!),
+      return baseTheme.copyWith(
+        primaryColor: _customPrimaryColor,
+        colorScheme: baseTheme.colorScheme.copyWith(
+          primary: _customPrimaryColor,
+        ),
         appBarTheme: AppBarTheme(color: _customPrimaryColor),
       );
     }
-    return _themeMode == ThemeMode.dark ? ThemeData.dark() : ThemeData.light();
+    return baseTheme;
   }
 
   MaterialColor generateMaterialColor(Color color) {

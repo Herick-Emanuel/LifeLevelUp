@@ -1,5 +1,3 @@
-// controllers/motivationController.js
-
 const MotivationMessage = require('../models/motivationMessage');
 
 exports.addMessage = async (req, res) => {

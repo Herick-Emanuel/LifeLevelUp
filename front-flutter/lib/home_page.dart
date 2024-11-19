@@ -121,11 +121,9 @@ class _HomePageState extends State<HomePage> {
       if (success) {
         User? currentUser = await ApiService.getCurrentUser();
         if (currentUser != null) {
-          // Calcula pontos com base no progresso
           int earnedPoints = (habit.progress + 1 >= habit.goal) ? 20 : 5;
           currentUser.addPoints(earnedPoints);
 
-          // Atualiza o usuário no backend
           await ApiService.updateUser(currentUser);
         }
         await _fetchHabits();

@@ -1,4 +1,3 @@
-// controllers/authController.js
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
@@ -7,7 +6,6 @@ const config = require('../config/config');
 exports.register = async (req, res) => {
     try {
         const { name, email, password } = req.body;
-        // Adicione um log para verificar os dados recebidos
         console.log('Dados de registro recebidos:', { name, email, password });
 
         const user = await User.create({ name, email, password });

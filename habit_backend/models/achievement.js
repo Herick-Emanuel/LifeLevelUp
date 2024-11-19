@@ -1,5 +1,3 @@
-// models/achievement.js
-
 const { DataTypes } = require('sequelize');
 const sequelize = require('./db');
 const User = require('./user');
