@@ -10,6 +10,7 @@ const User = sequelize.define(
     password: { type: DataTypes.STRING, allowNull: false },
     level: { type: DataTypes.INTEGER, defaultValue: 1 },
     points: { type: DataTypes.INTEGER, defaultValue: 0 },
+    is_admin: { type: DataTypes.BOOLEAN, defaultValue: false },
   },
   {
     tableName: "user",

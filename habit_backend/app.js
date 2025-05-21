@@ -40,6 +40,7 @@ const customizationRoutes = require("./routes/customizationRoutes");
 const rankingRoutes = require("./routes/rankingRoutes");
 const eventRoutes = require("./routes/eventRoutes");
 const habitCompletionRoutes = require("./routes/habitCompletionRoutes");
+const communityChallengeRoutes = require("./routes/communityChallengeRoutes");
 
 const app = express();
 
@@ -75,6 +76,7 @@ app.use("/api/customization", customizationRoutes);
 app.use("/api/ranking", rankingRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/habit-completions", habitCompletionRoutes);
+app.use("/api/community-challenges", communityChallengeRoutes);
 
 // Middleware de tratamento de erros
 app.use((err, req, res, next) => {
