@@ -27,6 +27,21 @@ const updateHabitProgress = async (habit) => {
   return habit;
 };
 
+const updateUserPointsAndLevel = async (
+  user,
+  pointsEarned = 10,
+  pointsPerLevel = 100
+) => {
+  await user.update({
+    points: user.points + pointsEarned,
+  });
+  const newLevel =
+    Math.floor((user.points + pointsEarned) / pointsPerLevel) + 1;
+  if (newLevel > user.level) {
+    await user.update({ level: newLevel });
+  }
+};
+
 exports.validateHabit = [
   body("name").notEmpty().withMessage("O nome do hábito é obrigatório"),
   body("frequency")
@@ -364,18 +379,7 @@ exports.updateProgress = async (req, res) => {
     // Verifica se o usuário completou o hábito
     if (progress >= habit.goal) {
       const user = await User.findByPk(req.user.userId);
-      // Adiciona pontos ao usuário
-      const pointsEarned = 10; // Você pode ajustar isso conforme necessário
-      await user.update({
-        points: user.points + pointsEarned,
-      });
-
-      // Verifica se o usuário deve subir de nível
-      const pointsPerLevel = 100; // Você pode ajustar isso conforme necessário
-      const newLevel = Math.floor(user.points / pointsPerLevel) + 1;
-      if (newLevel > user.level) {
-        await user.update({ level: newLevel });
-      }
+      await updateUserPointsAndLevel(user);
     }
 
     res.json(updatedHabit);
@@ -386,3 +390,5 @@ exports.updateProgress = async (req, res) => {
       .json({ message: "Erro ao atualizar progresso", error: error.message });
   }
 };
+
+exports.updateUserPointsAndLevel = updateUserPointsAndLevel;

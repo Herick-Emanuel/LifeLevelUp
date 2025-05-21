@@ -2,6 +2,7 @@ const HabitCompletion = require("../models/habit_completion");
 const Habit = require("../models/habit");
 const { Op } = require("sequelize");
 const sequelize = require("sequelize");
+const { updateUserPointsAndLevel } = require("./habitController");
 
 exports.createCompletion = async (req, res) => {
   try {
@@ -43,6 +44,11 @@ exports.createCompletion = async (req, res) => {
 
     // Atualiza o progresso do hábito
     await habit.increment("progress");
+    await habit.reload();
+    if (habit.progress >= habit.goal) {
+      const user = await require("../models/user").findByPk(habit.user_id);
+      await updateUserPointsAndLevel(user);
+    }
 
     res.status(201).json(completion);
   } catch (error) {
