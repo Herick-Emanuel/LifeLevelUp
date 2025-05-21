@@ -38,12 +38,27 @@ exports.validateHabit = [
   body("reminder")
     .isBoolean()
     .withMessage("Reminder deve ser verdadeiro ou falso"),
-  body("quantidade_de_conclusoes")
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage(
-      "A quantidade de conclusões deve ser um número inteiro positivo"
-    ),
+  body("quantidade_de_conclusoes").custom((value, { req }) => {
+    if (req.body.frequency !== "Diário") {
+      return true; // Não valida para semanal/mensal
+    }
+    if (value === undefined || value === null || value === "") {
+      throw new Error(
+        "A quantidade de conclusões é obrigatória para hábitos diários"
+      );
+    }
+    if (typeof value === "string" && value.trim() === "") {
+      throw new Error(
+        "A quantidade de conclusões é obrigatória para hábitos diários"
+      );
+    }
+    if (isNaN(Number(value)) || Number(value) < 1) {
+      throw new Error(
+        "A quantidade de conclusões deve ser um número inteiro positivo"
+      );
+    }
+    return true;
+  }),
   body("tempo_de_duracao_do_habito")
     .optional()
     .isInt({ min: 0 })
@@ -67,7 +82,6 @@ exports.createHabit = async (req, res) => {
       reminder,
       reminder_time,
       reminder_days,
-      quantidade_de_conclusoes,
       tempo_de_duracao_do_habito,
     } = req.body;
 
@@ -158,6 +172,14 @@ exports.createHabit = async (req, res) => {
           parsedReminderDays = [];
         }
       }
+    }
+
+    let { quantidade_de_conclusoes } = req.body;
+    if (
+      quantidade_de_conclusoes === "" ||
+      quantidade_de_conclusoes === undefined
+    ) {
+      quantidade_de_conclusoes = null;
     }
 
     const habitData = {

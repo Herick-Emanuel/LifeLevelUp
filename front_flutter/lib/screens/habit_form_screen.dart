@@ -215,7 +215,8 @@ class _HabitFormScreenState extends State<HabitFormScreen> {
         reminderDays: _reminderDays,
         userId: widget.userId,
         quantidadeDeConclusoes:
-            _frequency == 'Diário'
+            _frequency == 'Diário' &&
+                    _quantidadeConclusoesController.text.isNotEmpty
                 ? int.parse(_quantidadeConclusoesController.text)
                 : null,
         tempoDeDuracaoDoHabito:
